@@ -6,10 +6,11 @@ __pycache__/
 # datas
 *.png
 *.jpg
+*.DS_Store
+*.csv
 
 # C extensions
 *.so
-.DS_Store
 
 # Distribution / packaging
 .Python

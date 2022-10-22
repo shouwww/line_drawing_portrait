@@ -1,0 +1,29 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+numpy = "*"
+scipy = "*"
+pillow = "*"
+oyaml = "*"
+dominate = "*"
+ninja = "*"
+ftfy = "*"
+tqdm = "*"
+regex = "*"
+torch = "*"
+torchvision = "*"
+torchaudio = "*"
+tensorboard = "*"
+scikit-learn = "*"
+opencv-python = "*"
+matplotlib = "*"
+pandas = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.7"
+python_full_version = "3.7.6"
