@@ -10,6 +10,7 @@ import math
 class Img_Process_Tool:
     _face_cascade_path = '../libs/haarcascades/haarcascade_frontalface_default.xml'
     _eye_cascade_path = '../libs/haarcascades/haarcascade_eye.xml'  # haarcascade_eye_tree_eyeglasses.xml  haarcascade_eye
+    _nose_cascade_path = '../libs/haarcascades/haarcascade_mcs_nose.xml'
     _neiborhood24 = np.array([[1, 1, 1, 1, 1],
                             [1, 1, 1, 1, 1],
                             [1, 1, 1, 1, 1],
@@ -19,15 +20,25 @@ class Img_Process_Tool:
 
     rate_h = 1.3
     rate_w = 1.3
+    canny_threshold = [300, 300]
 
     def __init__(self):
         self.face_cascade = cv2.CascadeClassifier(os.path.join(os.path.dirname(__file__), self._face_cascade_path))
         self.eye_cascade = cv2.CascadeClassifier(os.path.join(os.path.dirname(__file__), self._eye_cascade_path))
+        self.nose_cascade = cv2.CascadeClassifier(os.path.join(os.path.dirname(__file__), self._nose_cascade_path))
     # End def
 
     def change_face_rate(self, rate_h=1.3, rate_w=1.3):
         self.rate_h = rate_h
         self.rate_w = rate_w
+    # End def
+
+    def change_canny_threshold(self, threshold1, threshold2):
+        self.canny_threshold = [threshold1, threshold2]
+    # End def
+
+    def get_canny_threshold(self):
+        return self.canny_threshold
     # End def
 
     def _img_gary(self, img):
@@ -63,22 +74,10 @@ class Img_Process_Tool:
             eyes = self.eye_cascade.detectMultiScale(img_gray)
             if len(eyes) == 2:
                 print('======= detect face =========')
-                # for (ex, ey, ew, eh) in eyes:
-                    # cv2.rectangle(img, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 2)
-                # End for
-                # cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
-                face_gray = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
-                img_gamma = self.gamma_compensation(face_gray, 2.0)
-                dilated2 = cv2.dilate(img_gamma, self._neiborhood24, iterations=1)
-                diff2 = cv2.absdiff(dilated2, img_gamma)
-                contour2_tmp = 255 - diff2
-                contour2 = self.gamma_compensation(contour2_tmp, 0.5)
-                contour3 = self.contrast_adjustment(contour2, 10.0, 128)
-                img_contrast = self.contrast_adjustment(face_gray, 10.0, 128)
-                dilated4 = cv2.dilate(img_contrast, self._neiborhood24, iterations=1)
-                diff4 = cv2.absdiff(dilated4, img_contrast)
-                contour4 = 255 - diff4
-                return_img = contour3
+                # Canny方によるエッジの検出
+                face_gray = cv2.GaussianBlur(face_gray, ksize=(3, 3), sigmaX=1.3)
+                return_img = cv2.Canny(face_gray, self.canny_threshold[0], self.canny_threshold[1])
+
                 return return_img
             # End if
         # End for

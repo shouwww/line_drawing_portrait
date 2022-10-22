@@ -48,16 +48,14 @@ while True:
     image = cv2.drawContours(image, contours, -1, (0, 0, 255), 3)   # 全輪郭を描画
     '''
 
-    
-
     rate_h = 1.3
     rate_w = 1.3
-    #edges = cv2.Canny(img_gray, threshold1, threshold2)    
+    #edges = cv2.Canny(img_gray, threshold1, threshold2)
     # draw_detect area
     for x, y, w, h in faces:
         x = int(x - (rate_w - 1.0) * 0.5 * w)
         w = int(h * rate_w)
-        y = int(y - h) #  int(y - (rate_h - 1.0) * 0.5 * w)
+        y = int(y - (rate_h - 1.0) * 0.5 * w)
         h = int(h * rate_h)
         cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 2)
         #cv2.rectangle(edges, (x, y), (x + w, y + h), (255, 0, 0), 2)
@@ -83,7 +81,7 @@ while True:
     cv2.imshow('edges', edges)
     # cv2.imshow('Original', img_gray)
     key_input = cv2.waitKey(1)
-    if key_input == 27:
+    if (key_input == 27) or (key_input == ord('q')):
         img_white = np.ones(edges.shape, np.uint8) * 255
         data_xy=[]
         print(key_input)
@@ -116,22 +114,22 @@ while True:
         cv2.waitKey(0)
         break
     elif key_input == ord('a'):
-        threshold1 = threshold1 -10
+        threshold1 = threshold1 - 10
         set_param_flg = True
     elif key_input == ord('d'):
-        threshold1 = threshold1 +10
+        threshold1 = threshold1 + 10
         if threshold1 > threshold2:
             threshold2 = threshold1
         # End if
         set_param_flg = True
     elif key_input == ord('s'):
-        threshold2 = threshold2 -10
+        threshold2 = threshold2 - 10
         if threshold1 > threshold2:
             threshold1 = threshold2
         # End if
         set_param_flg = True
     elif key_input == ord('w'):
-        threshold2 = threshold2 +10
+        threshold2 = threshold2 + 10
         set_param_flg = True
     # End if
     if set_param_flg:

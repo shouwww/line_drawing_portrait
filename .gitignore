@@ -6,8 +6,8 @@ __pycache__/
 # datas
 *.png
 *.jpg
-*.DS_Store
 *.csv
+.DS_Store
 
 # C extensions
 *.so
